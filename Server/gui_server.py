@@ -35,7 +35,7 @@ class ServerWindow(Frame):
         self.btn_text = StringVar()
         self.btn_text.set("Start Server")
         self.buttonServer = Button(self, textvariable=self.btn_text, command=self.start_stop_server)
-        self.buttonServer.grid(row=3, column=0, columnspan=2, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
+        self.buttonServer.grid(row=3, column=0, columnspan=3, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
 
         Grid.rowconfigure(self, 1, weight=1)
         Grid.columnconfigure(self, 0, weight=1)
@@ -66,11 +66,13 @@ class ServerWindow(Frame):
 
     def start_stop_server(self):
         if self.server.is_connected == True:
-            self.server.close_server_socket()
-            self.btn_text.set("Start Server")
+            if(self.btn_text.get() == "ingelogde clients"):
+                Label(self, text="De ingelogde clients:").grid(row=0)
+                self.lstnumbers.delete(0,'end')
+                self.messages_queue.put("hallo")
         else:
             self.server.init_server()
             self.server.start()             #thread!
-            self.btn_text.set("Stop Server")
+            self.btn_text.set("ingelogde clients")
 
 
