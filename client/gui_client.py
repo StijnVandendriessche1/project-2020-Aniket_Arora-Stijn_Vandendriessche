@@ -26,7 +26,7 @@ class Window(Frame):
         self.entry_naam = Entry(self, width=40)
         self.label_resultaat = Label(self, width=40, anchor='w'  )
 
-        self.naam.grid(row=0, column=1, sticky=E + W, padx=(5, 5), pady =(5,5))
+        self.entry_naam.grid(row=0, column=1, sticky=E + W, padx=(5, 5), pady =(5,5))
         self.label_resultaat.grid(row=2, column=1, sticky=E + W)
 
         self.btnRegister = Button(self, text="Log in", command=self.login)

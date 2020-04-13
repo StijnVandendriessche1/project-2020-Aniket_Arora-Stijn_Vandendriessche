@@ -17,7 +17,7 @@ class ClientHandler(threading.Thread):
 
     def run(self):
         io_stream_client = self.socket_to_client.makefile(mode='rw')
-
+        naam = ""
         self.print_bericht_gui_server("Waiting for numbers...")
         commando = io_stream_client.readline().rstrip('\n')
         while (commando != "CLOSE"):
@@ -25,7 +25,6 @@ class ClientHandler(threading.Thread):
                 naam = io_stream_client.readline().rstrip('\n')
                 users = pd.read_csv('../data/users.csv')
                 a = users['naam'].where(users['naam'] == naam)
-                print(a)
                 if(a.dropna().empty):
                     record = pd.DataFrame([[naam]], columns=["naam"])
                     users = pd.concat([record, users], ignore_index=True)
@@ -38,6 +37,9 @@ class ClientHandler(threading.Thread):
 
             commando = io_stream_client.readline().rstrip('\n')
 
+        users = pd.read_csv('../data/users.csv')
+        users = users[users.naam != naam]
+        users.to_csv('../data/users.csv', index=False)
         self.print_bericht_gui_server("Connection with client closed...")
         self.socket_to_client.close()
 
