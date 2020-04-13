@@ -5,15 +5,15 @@ from tkinter import messagebox
 
 
 class Dashboard(Frame):
-    def __init__(self, master=None):
+    def __init__(self, master=None, writer=None):
         Frame.__init__(self, master)
         self.master = master
         self.init_window()
-        #self.my_writer_obj = writer
+        self.my_writer_obj = writer
 
     # Creation of init_window
     def init_window(self):
-        self.master.title("Dashboard")
+        #self.master.title("Dashboard")
         self.pack(fill=BOTH, expand=1)
         Label(self, text="Dashboard").grid(row=0)
 
