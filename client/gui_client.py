@@ -4,6 +4,7 @@ import socket
 from tkinter import *
 from tkinter import messagebox
 
+from client.gui_dashboard import Dashboard
 
 class Window(Frame):
     def __init__(self, master=None):
@@ -65,7 +66,8 @@ class Window(Frame):
             answer = self.my_writer_obj.readline().rstrip('\n')
             logging.info("Answer server: %s" % answer)
             self.label_resultaat['text'] = answer
-
+            if answer == "success":
+                d = Dashboard(writer=self.my_writer_obj)
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")
@@ -79,11 +81,3 @@ class Window(Frame):
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")
-
-
-logging.basicConfig(level=logging.INFO)
-
-root = Tk()
-# root.geometry("400x300")
-app = Window(root)
-root.mainloop()

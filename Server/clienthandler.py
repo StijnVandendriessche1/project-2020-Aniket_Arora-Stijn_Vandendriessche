@@ -1,5 +1,7 @@
 import threading
 import pandas as pd
+import random
+
 class ClientHandler(threading.Thread):
 
     numbers_clienthandlers = 0
@@ -13,6 +15,7 @@ class ClientHandler(threading.Thread):
         #id clienthandler
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
+        self.data = pd.read_csv("../data/fake.csv")
 
 
     def run(self):
@@ -30,11 +33,13 @@ class ClientHandler(threading.Thread):
                     users = pd.concat([record, users], ignore_index=True)
                     users.to_csv('../data/users.csv', index=False)
                     self.print_bericht_gui_server(naam + " was logged in")
-                    io_stream_client.write("%s\n" % "ingelogd")
+                    io_stream_client.write("%s\n" % "success")
                 else:
                     io_stream_client.write("%s\n" % "deze naam is momenteel al ingelogd")
-            io_stream_client.flush()
-
+                io_stream_client.flush()
+            elif commando == "random":
+                r = random.randint(0, 12999)
+                print(self.data[r])
             commando = io_stream_client.readline().rstrip('\n')
 
         users = pd.read_csv('../data/users.csv')
