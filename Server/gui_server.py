@@ -6,6 +6,7 @@ from threading import Thread
 from tkinter import *
 
 from Server.server import SommenServer
+from Server.gui_logged_on import ScreenLoggedOn
 
 class ServerWindow(Frame):
     def __init__(self, master=None):
@@ -62,14 +63,12 @@ class ServerWindow(Frame):
             message = self.messages_queue.get()
         print("queue stop")
 
-
-
     def start_stop_server(self):
         if self.server.is_connected == True:
             if(self.btn_text.get() == "ingelogde clients"):
-                Label(self, text="De ingelogde clients:").grid(row=0)
-                self.lstnumbers.delete(0,'end')
-                self.messages_queue.put("hallo")
+                print("start nieuw scherm")
+                t = ScreenLoggedOn(message_queue=self.messages_queue)
+                t.start()
         else:
             self.server.init_server()
             self.server.start()             #thread!
