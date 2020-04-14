@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0fe3aab3-b48b-43a7-9fb4-d6acee628b68" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/domein/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domein/article.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/clienthandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server/clienthandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server/start.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/gui_dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/gui_dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/users.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/users.csv" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,7 +55,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/start.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
@@ -74,14 +67,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data/users.csv">
           <provider editor-type-id="csv-table-editor">
             <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
           </provider>
           <provider selected="true" editor-type-id="csv-text-editor">
-            <state>
-              <caret column="4" selection-start-column="4" selection-end-column="4" />
+            <state relative-caret-position="17">
+              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
             </state>
           </provider>
         </entry>
@@ -109,9 +102,9 @@
         <option value="$PROJECT_DIR$/Server/start.py" />
         <option value="$PROJECT_DIR$/client/test.py" />
         <option value="$PROJECT_DIR$/domein/article.py" />
-        <option value="$PROJECT_DIR$/data/users.csv" />
         <option value="$PROJECT_DIR$/Server/clienthandler.py" />
         <option value="$PROJECT_DIR$/client/gui_dashboard.py" />
+        <option value="$PROJECT_DIR$/data/users.csv" />
       </list>
     </option>
   </component>
@@ -436,21 +429,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/users.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state>
-          <caret column="4" selection-start-column="4" selection-end-column="4" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/gui_dashboard.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="53">
@@ -495,6 +473,21 @@
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/users.csv">
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
