@@ -1,6 +1,12 @@
 import threading
 import pandas as pd
 import random
+import pickle
+import json
+import base64
+import jsonpickle
+
+from domein.article import Article
 
 class ClientHandler(threading.Thread):
 
@@ -39,7 +45,23 @@ class ClientHandler(threading.Thread):
                 io_stream_client.flush()
             elif commando == "random":
                 r = random.randint(0, 12999)
-                print(self.data[r])
+                a = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url)
+                x = jsonpickle.encode(a)
+                io_stream_client.write("%s\n"%x)
+                io_stream_client.flush()
+                #pickle.dump(x, io_stream_client)
+                #pickle.dumps(x, io_stream_client)
+
+                # print(art)
+                # x = pickle.dumps(art)
+                # print(x)
+                # art_base64 = base64.encodestring(x)
+                # print(art_base64)
+                # media = art_base64.decode("utf-8")
+                # print(media)
+                # pickle.dump(media, io_stream_client)
+
+                #io_stream_client.flush()
             commando = io_stream_client.readline().rstrip('\n')
 
         users = pd.read_csv('../data/users.csv')

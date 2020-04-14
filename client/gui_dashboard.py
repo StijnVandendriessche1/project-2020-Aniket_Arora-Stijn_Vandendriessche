@@ -2,7 +2,11 @@ import logging
 import socket
 from tkinter import *
 from tkinter import messagebox
+import pickle
+import json
+import jsonpickle
 
+from domein.article import Article
 
 class Dashboard(Frame):
     def __init__(self, master=None, writer=None):
@@ -30,3 +34,6 @@ class Dashboard(Frame):
         self.my_writer_obj.flush()
         answer = self.my_writer_obj.readline().rstrip('\n')
         print(answer)
+        art = jsonpickle.decode(answer)
+        print(art)
+        print(art.title)

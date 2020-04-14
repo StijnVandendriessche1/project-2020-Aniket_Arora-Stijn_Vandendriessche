@@ -2,7 +2,6 @@ from tkinter import *
 
 from Server.gui_server import ServerWindow
 
-
 def callback():
     print("callback")
     gui_server.afsluiten_server()
