@@ -34,6 +34,7 @@ class SommenServer(threading.Thread):
         self.print_bericht_gui_server("CLOSE_SERVER")
         self.serversocket.close()
 
+
     # thread-klasse!
     def run(self):
         number_received_message = 0

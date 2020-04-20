@@ -1,14 +1,14 @@
 from tkinter import *
 
-from Server.gui_server import ServerWindow
+from client.gui_client import  Window
 
 def callback():
     print("callback")
-    gui_server.afsluiten_server()
+    gui_client.close_connection()
     root.destroy()
 
 root = Tk()
 root.geometry("600x500")
-gui_server = ServerWindow(root)
+gui_client = Window(root)
 root.protocol("WM_DELETE_WINDOW", callback)
 root.mainloop()
