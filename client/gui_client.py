@@ -6,6 +6,7 @@ from tkinter import messagebox
 
 from client.gui_dashboard import Dashboard
 
+
 class Window(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
