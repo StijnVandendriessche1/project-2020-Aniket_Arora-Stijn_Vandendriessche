@@ -2,6 +2,7 @@ import threading
 import pandas as pd
 from tkinter import *
 from tkinter import scrolledtext
+from Server.clienthandler import ClientHandler
 
 class ScreenLoggedOn(threading.Thread):
 
@@ -20,8 +21,6 @@ class ScreenLoggedOn(threading.Thread):
         lbl.grid(column=0, row=0)
         txt = scrolledtext.ScrolledText(self.window, width=40, height=10)
         txt.grid(column=0, columnspan=2, row=1)
-        users = pd.read_csv('../data/users.csv')
-        u = users.naam
-        for us in u:
+        for us in ClientHandler.users:
             txt.insert(INSERT, us + "\n")
         self.window.mainloop()

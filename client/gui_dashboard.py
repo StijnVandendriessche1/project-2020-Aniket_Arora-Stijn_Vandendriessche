@@ -3,7 +3,7 @@ import pandas as pd
 from tkinter import *
 from tkinter import scrolledtext
 
-class ScreenLoggedOn(threading.Thread):
+class Dashboard(threading.Thread):
 
     numbers_clienthandlers = 0
 

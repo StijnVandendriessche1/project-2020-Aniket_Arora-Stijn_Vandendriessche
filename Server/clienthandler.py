@@ -28,14 +28,13 @@ class ClientHandler(threading.Thread):
         for i in ClientHandler.users:
             if name == i:
                 return False
-        self.name = name
-        ClientHandler.users.append(name)
+        self.titel = name
+        ClientHandler.users.append(self.titel)
         return True
 
 
     def run(self):
         io_stream_client = self.socket_to_client.makefile(mode='rw')
-        naam = ""
         self.print_bericht_gui_server("Waiting for numbers...")
         commando = io_stream_client.readline().rstrip('\n')
         while (commando != "CLOSE"):
@@ -44,7 +43,7 @@ class ClientHandler(threading.Thread):
                 a = self.log_on(naam)
                 if a:
                     io_stream_client.write("%s\n" % "success")
-                    self.messages_queue.put("´s logde zonet in" % naam)
+                    self.print_bericht_gui_server("%s logde zonet in" % naam)
                 else:
                     io_stream_client.write("%s\n" % "deze naam is momenteel al ingelogd")
                 io_stream_client.flush()
@@ -56,9 +55,9 @@ class ClientHandler(threading.Thread):
                 io_stream_client.flush()
             commando = io_stream_client.readline().rstrip('\n')
 
-        users = pd.read_csv('../data/users.csv')
-        users = users[users.naam != naam]
-        users.to_csv('../data/users.csv', index=False)
+        if self.titel:
+            self.print_bericht_gui_server("%s logde zonet uit" % self.titel)
+            ClientHandler.users.remove(self.titel)
         self.print_bericht_gui_server("Connection with client closed...")
         self.socket_to_client.close()
 
