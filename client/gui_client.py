@@ -3,8 +3,8 @@ import logging
 import socket
 from tkinter import *
 from tkinter import messagebox
+import jsonpickle
 
-#from client.gui_dashboard import Dashboard
 
 
 class Window(Frame):
@@ -94,3 +94,12 @@ class Window(Frame):
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")
+
+    def getRandom(self):
+        self.my_writer_obj.write("random\n")
+        self.my_writer_obj.flush()
+        answer = self.my_writer_obj.readline().rstrip('\n')
+        print(answer)
+        art = jsonpickle.decode(answer)
+        print(art)
+        print(art.title)
