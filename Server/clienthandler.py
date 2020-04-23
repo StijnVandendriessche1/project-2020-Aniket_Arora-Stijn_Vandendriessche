@@ -53,6 +53,13 @@ class ClientHandler(threading.Thread):
                 x = jsonpickle.encode(a)
                 io_stream_client.write("%s\n"%x)
                 io_stream_client.flush()
+            elif commando == "title":
+                title = io_stream_client.readline().rstrip('\n')
+                a = self.data.loc[self.data['title']==title]
+                b = Article(a.title.values[0], a.text.values[0], a.main_img_url.values[0])
+                x = jsonpickle.encode(b)
+                io_stream_client.write("%s\n" % x)
+                io_stream_client.flush()
             commando = io_stream_client.readline().rstrip('\n')
 
         if self.titel:

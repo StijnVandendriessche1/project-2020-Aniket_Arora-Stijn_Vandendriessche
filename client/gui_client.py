@@ -4,7 +4,9 @@ import socket
 from tkinter import *
 from tkinter import messagebox
 import jsonpickle
-
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
 
 
 class Window(Frame):
@@ -78,8 +80,8 @@ class Window(Frame):
             logging.info("Answer server: %s" % answer)
             self.label_resultaat['text'] = answer
             if answer == "success":
-                print("woehoew")
                 self.init_window_dashboard()
+                self.get_by_title()
                 #d = Dashboard(writer=self.my_writer_obj)
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
@@ -95,11 +97,23 @@ class Window(Frame):
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")
 
-    def getRandom(self):
+    def get_random(self):
         self.my_writer_obj.write("random\n")
         self.my_writer_obj.flush()
         answer = self.my_writer_obj.readline().rstrip('\n')
-        print(answer)
         art = jsonpickle.decode(answer)
-        print(art)
         print(art.title)
+
+    def get_by_title(self, title="Mikhail Saakashvili quits as Odessa governor"):
+        self.my_writer_obj.write("title\n")
+        self.my_writer_obj.write("%s\n" % title)
+        self.my_writer_obj.flush()
+        answer = self.my_writer_obj.readline().rstrip('\n')
+        art = jsonpickle.decode(answer)
+        print(art.img)
+        resp = requests.get(art.img)
+        load = Image.open(BytesIO(resp.content))
+        render = ImageTk.PhotoImage(load)
+        img = Label(image=render)
+        img.image = render
+        img.place(x=0,y=0)
