@@ -111,6 +111,8 @@ class Window(Frame):
         answer = self.my_writer_obj.readline().rstrip('\n')
         art = jsonpickle.decode(answer)
         print(art.img)
+
+        #sample code van img in tkinter
         resp = requests.get(art.img)
         load = Image.open(BytesIO(resp.content))
         render = ImageTk.PhotoImage(load)
