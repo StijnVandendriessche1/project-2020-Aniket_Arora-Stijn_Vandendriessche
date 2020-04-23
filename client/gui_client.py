@@ -4,7 +4,7 @@ import socket
 from tkinter import *
 from tkinter import messagebox
 
-from client.gui_dashboard import Dashboard
+#from client.gui_dashboard import Dashboard
 
 
 class Window(Frame):
@@ -68,7 +68,8 @@ class Window(Frame):
             logging.info("Answer server: %s" % answer)
             self.label_resultaat['text'] = answer
             if answer == "success":
-                d = Dashboard(writer=self.my_writer_obj)
+                print("woehoew")
+                #d = Dashboard(writer=self.my_writer_obj)
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")

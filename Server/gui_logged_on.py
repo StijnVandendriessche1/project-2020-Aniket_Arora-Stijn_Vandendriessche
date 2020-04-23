@@ -25,6 +25,3 @@ class ScreenLoggedOn(threading.Thread):
         for us in u:
             txt.insert(INSERT, us + "\n")
         self.window.mainloop()
-
-    def terug(self):
-        print("niks")

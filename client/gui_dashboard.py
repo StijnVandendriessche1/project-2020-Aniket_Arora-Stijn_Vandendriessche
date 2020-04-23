@@ -1,39 +1,30 @@
-import logging
-import socket
+import threading
+import pandas as pd
 from tkinter import *
-from tkinter import messagebox
-import pickle
-import json
-import jsonpickle
+from tkinter import scrolledtext
 
-from domein.article import Article
+class ScreenLoggedOn(threading.Thread):
 
-class Dashboard(Frame):
-    def __init__(self, master=None, writer=None):
-        Frame.__init__(self, master)
-        self.master = master
+    numbers_clienthandlers = 0
+
+    def __init__(self, message_queue):
+        threading.Thread.__init__(self)
         self.init_window()
-        self.my_writer_obj = writer
+        self.message_queue = message_queue
 
-    # Creation of init_window
     def init_window(self):
-        #self.master.title("Dashboard")
-        self.pack(fill=BOTH, expand=1)
-        Label(self, text="Dashboard").grid(row=0)
+        self.window = Tk()
+        self.window.title("ingelogde clients")
+        self.window.geometry('350x200')
+        lbl = Label(self.window, text="Momenteel zijn volgende clients ingelogd:")
+        lbl.grid(column=0, row=0)
+        txt = scrolledtext.ScrolledText(self.window, width=40, height=10)
+        txt.grid(column=0, columnspan=2, row=1)
+        users = pd.read_csv('../data/users.csv')
+        u = users.naam
+        for us in u:
+            txt.insert(INSERT, us + "\n")
+        self.window.mainloop()
 
-        self.btn_text = StringVar()
-        self.btn_text.set("Get random fake-news article")
-        self.buttonServer = Button(self, textvariable=self.btn_text, command=self.getRandom)
-        self.buttonServer.grid(row=3, column=0, columnspan=3, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
-
-    def __del__(self):
-        self.close_connection()
-
-    def getRandom(self):
-        self.my_writer_obj.write("random\n")
-        self.my_writer_obj.flush()
-        answer = self.my_writer_obj.readline().rstrip('\n')
-        print(answer)
-        art = jsonpickle.decode(answer)
-        print(art)
-        print(art.title)
+    def terug(self):
+        print("niks")
