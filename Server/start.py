@@ -1,4 +1,5 @@
 from tkinter import *
+import sys
 
 from Server.gui_server import ServerWindow
 

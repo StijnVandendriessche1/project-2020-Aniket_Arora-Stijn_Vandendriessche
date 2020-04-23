@@ -4,7 +4,7 @@ import socket
 from tkinter import *
 from tkinter import messagebox
 
-from client.gui_dashboard import Dashboard
+#from client.gui_dashboard import Dashboard
 
 
 class Window(Frame):
@@ -37,6 +37,16 @@ class Window(Frame):
         Grid.rowconfigure(self, 3, weight=1)
         Grid.columnconfigure(self, 1, weight=1)
 
+    def init_window_dashboard(self):
+        self.pack_forget()
+        self.grid_forget()
+
+        self.master.title("Dashboard")
+
+        #self.pack(fill=BOTH, expand=1)
+
+        #Label(self, text="Dashboard: ").grid(row=0)
+
 
     def __del__(self):
         self.close_connection()
@@ -68,7 +78,9 @@ class Window(Frame):
             logging.info("Answer server: %s" % answer)
             self.label_resultaat['text'] = answer
             if answer == "success":
-                d = Dashboard(writer=self.my_writer_obj)
+                print("woehoew")
+                self.init_window_dashboard()
+                #d = Dashboard(writer=self.my_writer_obj)
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")

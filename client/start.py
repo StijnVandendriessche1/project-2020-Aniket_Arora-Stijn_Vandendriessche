@@ -10,7 +10,6 @@ def callback():
 
 
 root = Tk()
-root.geometry("600x500")
 gui_client = Window(root)
 root.protocol("WM_DELETE_WINDOW", callback)
 root.mainloop()
