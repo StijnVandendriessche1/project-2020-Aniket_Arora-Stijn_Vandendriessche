@@ -66,7 +66,6 @@ class ServerWindow(Frame):
     def start_stop_server(self):
         if self.server.is_connected == True:
             if(self.btn_text.get() == "ingelogde clients"):
-                print("start nieuw scherm")
                 t = ScreenLoggedOn(message_queue=self.messages_queue)
                 t.start()
         else:
