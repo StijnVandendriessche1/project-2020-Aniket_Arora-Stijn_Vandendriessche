@@ -11,7 +11,7 @@ def callback():
 
 
 root = Tk()
-root.geometry("600x500")
+root.geometry("1280x720")
 gui_server = ServerWindow(root)
 root.protocol("WM_DELETE_WINDOW", callback)
 root.mainloop()
