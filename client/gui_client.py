@@ -20,7 +20,7 @@ class Window(Frame):
     def init_window(self):
         # changing the title of our master widget
         self.master.title("Registreren")
-        # self.master.geometry("400x300")
+        self.master.geometry("400x300")
 
         # allowing the widget to take the full space of the root window
         self.pack(fill=BOTH, expand=1)
@@ -105,6 +105,7 @@ class Window(Frame):
         print(art.title)
 
     def get_by_title(self, title="Mikhail Saakashvili quits as Odessa governor"):
+        self.master.geometry("1280x720")
         self.my_writer_obj.write("title\n")
         self.my_writer_obj.write("%s\n" % title)
         self.my_writer_obj.flush()
