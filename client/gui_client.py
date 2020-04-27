@@ -7,6 +7,7 @@ import jsonpickle
 from PIL import Image, ImageTk
 import requests
 from io import BytesIO
+import pandas as pd
 
 
 class Window(Frame):
@@ -15,6 +16,13 @@ class Window(Frame):
         self.master = master
         self.init_window()
         self.makeConnnectionWithServer()
+
+        # Variables
+        self.name = ""
+        self.nickname = ""
+        self.email = ""
+
+        self.dataset_users = pd.read_csv('data/users.csv')
 
     # Creation of init_window
     def init_window(self):
@@ -44,6 +52,8 @@ class Window(Frame):
         self.grid_forget()
 
         self.master.title("Dashboard")
+
+        self.label_title = Label(self, width=40, anchor='w')
 
         #self.pack(fill=BOTH, expand=1)
 
@@ -113,6 +123,8 @@ class Window(Frame):
         art = jsonpickle.decode(answer)
         print(art.img)
 
+        self.label_title(self, text=title)
+
         #sample code van img in tkinter
         resp = requests.get(art.img)
         load = Image.open(BytesIO(resp.content))
@@ -120,3 +132,12 @@ class Window(Frame):
         img = Label(image=render)
         img.image = render
         img.place(x=0,y=0)
+
+    def append_user_csv(self):
+        dataframe_user = pd.DataFrame({"name": [self.name],
+                                       "nickname": [self.nickname],
+                                       "email": [self.email]})
+        logging.info('Made user')
+        pd.concat([self.dataset_users, dataframe_user], axis=0, ignore_index=True)
+        self.dataset_users.to_csv('data/users.csv', index=False)
+        logging.info('Appending users.csv with new dataset')
