@@ -21,7 +21,7 @@ class Window(Frame):
         self.nickname = ""
         self.email = ""
 
-        self.dataset_users = pd.read_csv('data/users.csv')
+        self.dataset_users = pd.read_csv('../data/users.csv')
 
     # Creation of init_window
     def init_window(self):

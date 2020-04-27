@@ -18,6 +18,7 @@ class Dashboard(Frame):
         self.article_text = StringVar()
         self.article_text.set("Text")
         self.Image = None
+        self.lstnumbers = None
         self.master = master
         self.init_window()
 
@@ -41,14 +42,22 @@ class Dashboard(Frame):
         self.btnSearch.grid(row=1, column=2, pady=(32, 32), sticky=N + S + E + W)
 
         self.btnStats = Button(self, text="Statistieken", command=self.zoeken)
-        self.btnStats.grid(row=1, column=4, padx=(372, 16), pady=(32, 32), sticky=E)
+        self.btnStats.grid(row=1, column=4, padx=(350, 16), pady=(32, 32), sticky=E)
 
         self.Title = Label(self, textvariable=self.article_title, font=("Arial", 24, "bold italic")).grid(row=2, column=1, columnspan=4)
-        self.Text = Label(self, textvariable=self.article_text, font=("Arial",8)).grid(row=3,column=1,columnspan=4)
+
+        self.scrollbar = Scrollbar(self, orient=VERTICAL)
+        self.lstnumbers = Listbox(self, yscrollcommand=self.scrollbar.set, height=20)
+        self.scrollbar.config(command=self.lstnumbers.yview)
+
+        self.lstnumbers.grid(row=3, column=1, columnspan=4, sticky=N + S + E + W)
+        self.scrollbar.grid(row=3, column=5, sticky=N + S)
+
+        #self.Text = Label(self, textvariable=self.article_text, font=("Arial",8)).grid(row=4,column=1,columnspan=4)
         #self.Image = Label(self).grid(row=4,column=1,columnspan=4, image=self.Image)
 
         self.btnRandom = Button(self, text="Willekeurig nieuw artikel", command=self.get_random)
-        self.btnRandom.grid(row=4, column=1, padx=(16, 16), pady=(32, 32), sticky=W)
+        self.btnRandom.grid(row=5, column=1, padx=(16, 16), pady=(32, 32), sticky=W)
 
         self.get_random()
 
@@ -71,7 +80,6 @@ class Dashboard(Frame):
         print(answer)
         art = jsonpickle.decode(answer)
         self.article_title.set("")
-        self.article_text.set("")
         d = 1
         for i in art.title:
             if d >= 45:
@@ -85,20 +93,26 @@ class Dashboard(Frame):
             d += 1
 
         d = 1
+        a = ""
+        b = 0
         for i in art.text:
             if i == "\n":
+                self.lstnumbers.insert(b, a)
+                a = ""
+                b += 2
                 d = 1
-                self.article_text.set(self.article_text.get() + i)
                 continue
             else:
-                if d >= 180:
+                if d >= 150:
                     if i == " ":
-                        self.article_text.set(self.article_text.get() + "\n")
+                        self.lstnumbers.insert(b, a)
+                        a = ""
+                        b += 1
                         d = 1
                     else:
-                        self.article_text.set(self.article_text.get() + i)
+                        a += i
                 else:
-                    self.article_text.set(self.article_text.get() + i)
+                    a += i
             d += 1
 
     def get_random(self):
@@ -106,8 +120,8 @@ class Dashboard(Frame):
         self.master.my_writer_obj.flush()
         answer = self.master.my_writer_obj.readline().rstrip('\n')
         art = jsonpickle.decode(answer)
+        self.lstnumbers.delete(0,'end')
         self.article_title.set("")
-        self.article_text.set("")
         d = 1
         for i in art.title:
             if d >= 45:
@@ -121,20 +135,26 @@ class Dashboard(Frame):
             d += 1
 
         d = 1
+        a = ""
+        b = 0
         for i in art.text:
             if i == "\n":
+                self.lstnumbers.insert(b,a)
+                a = ""
+                b += 2
                 d = 1
-                self.article_text.set(self.article_text.get() + i)
                 continue
             else:
-                if d >= 180:
+                if d >= 150:
                     if i == " ":
-                        self.article_text.set(self.article_text.get() + "\n")
+                        self.lstnumbers.insert(b, a)
+                        a = ""
+                        b +=1
                         d = 1
                     else:
-                        self.article_text.set(self.article_text.get() + i)
+                        a += i
                 else:
-                    self.article_text.set(self.article_text.get() + i)
+                    a += i
             d+=1
 
         #sample code van img in tkinter
