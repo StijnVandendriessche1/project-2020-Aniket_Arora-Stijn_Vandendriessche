@@ -13,7 +13,6 @@ class Window(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
-        print(self.master.a)
         self.init_window()
 
 
@@ -55,16 +54,6 @@ class Window(Frame):
             if answer == "success":
                 logging.info(answer)
                 self.master.switch_frame("dashboard")
-        except Exception as ex:
-            logging.error("Foutmelding: %s" % ex)
-            messagebox.showinfo("Sommen", "Something has gone wrong...")
-
-    def close_connection(self):
-        try:
-            logging.info("Close connection with server...")
-            self.master.my_writer_obj.write("%s\n" % "CLOSE")
-            self.master.my_writer_obj.flush()
-            self.socket_to_server.close()
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Sommen", "Something has gone wrong...")

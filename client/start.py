@@ -3,14 +3,16 @@ from client.gui_client import Window
 from client.gui_dashboard import Dashboard
 import logging
 import socket
+from tkinter import messagebox
 
 class StartApp(Tk):
 
     def __init__(self):
         Tk.__init__(self)
         self._frame = None
+        self.my_writer_obj = None
+        self.socket_to_server = None
         self.makeConnnectionWithServer()
-        self.a = "stijn is leuk"
         self.switch_frame("start")
 
     def __del__(self):
@@ -29,6 +31,16 @@ class StartApp(Tk):
             logging.info("Open connection with server succesfully")
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
+
+    def close_connection(self):
+        try:
+            logging.info("Close connection with server...")
+            self.my_writer_obj.write("%s\n" % "CLOSE")
+            self.my_writer_obj.flush()
+            self.socket_to_server.close()
+        except Exception as ex:
+            logging.error("Foutmelding: %s" % ex)
+            messagebox.showinfo("Sommen", "Something has gone wrong...")
 
     #we switchen tss 3 frames: startframe <> bmiframe, startframe <> numbersframe
 
