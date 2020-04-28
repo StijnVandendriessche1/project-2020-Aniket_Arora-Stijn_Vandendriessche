@@ -26,8 +26,6 @@ class Window(Frame):
     def init_window(self):
         # changing the title of our master widget
         self.master.title("Registreren")
-        self.master.geometry("400x140")
-
         # allowing the widget to take the full space of the root window
         self.pack(fill=BOTH, expand=1)
 
@@ -55,7 +53,8 @@ class Window(Frame):
         try:
             self.user = User(self.entry_naam.get(), self.entry_nickname.get(), self.entry_email.get())
             self.master.my_writer_obj.write("login\n")
-            self.master.my_writer_obj.write("%s\n" % self.user.name)
+            x = jsonpickle.encode(self.user)
+            self.master.my_writer_obj.write("%s\n" % x)
             self.master.my_writer_obj.flush()
 
             # # waiting for answer
@@ -65,44 +64,7 @@ class Window(Frame):
             self.label_resultaat['text'] = answer
             if answer == "success":
                 logging.info(answer)
-                self.append_user_csv()
                 self.master.switch_frame("dashboard")
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
             messagebox.showinfo("Log in", "Something has gone wrong...")
-
-    def get_random(self):
-        self.master.my_writer_obj.write("random\n")
-        self.master.my_writer_obj.flush()
-        answer = self.master.my_writer_obj.readline().rstrip('\n')
-        art = jsonpickle.decode(answer)
-        print(art.title)
-
-    def get_by_title(self, title="Mikhail Saakashvili quits as Odessa governor"):
-        self.master.geometry("1280x720")
-        self.my_writer_obj.write("title\n")
-        self.my_writer_obj.write("%s\n" % title)
-        self.my_writer_obj.flush()
-        answer = self.my_writer_obj.readline().rstrip('\n')
-        art = jsonpickle.decode(answer)
-        print(art.img)
-
-        self.label_title(self, text=title)
-
-        #sample code van img in tkinter
-        #resp = requests.get(art.img)
-        #load = Image.open(BytesIO(resp.content))
-        #render = ImageTk.PhotoImage(load)
-        #img = Label(image=render)
-        #img.image = render
-        #img.place(x=0,y=0)
-
-    def append_user_csv(self):
-        print("doing the csv shit")
-        dataframe_user = pd.DataFrame({"name": [self.user.name],
-                                       "nickname": [self.user.nickname],
-                                       "email": [self.user.email]})
-        logging.info('Made user')
-        pd.concat([self.dataset_users, dataframe_user], axis=0, ignore_index=True)
-        self.dataset_users.to_csv('../data/users.csv', index=False)
-        logging.info('Appending users.csv with new dataset')

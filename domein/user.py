@@ -4,5 +4,5 @@ class User():
         self.nickname = nickname
         self.email = email
 
-    def to_string(self):
-        return "name: %s\nnickname: %s\nemail: %s" % (self.name, self.nickname, self.email)
+    def __str__(self):
+        return "name: %s - nickname: %s - email: %s" % (self.name, self.nickname, self.email)

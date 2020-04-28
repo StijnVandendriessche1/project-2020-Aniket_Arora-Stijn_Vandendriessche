@@ -18,14 +18,14 @@ class ScreenLoggedOn(threading.Thread):
     def init_window(self):
         self.window = Tk()
         self.window.title("ingelogde clients")
-        self.window.geometry('350x200')
+        self.window.geometry('500x300')
         lbl = Label(self.window, text="Momenteel zijn volgende clients ingelogd:")
-        lbl.grid(column=0, row=0)
-        self.txt = scrolledtext.ScrolledText(self.window, width=40, height=10)
+        lbl.grid(column=0, row=0, columnspan=2)
+        self.txt = scrolledtext.ScrolledText(self.window, width=60, height=17)
         self.txt.grid(column=0, columnspan=2, row=1)
         self.users = ClientHandler.users
         for us in self.users:
-            self.txt.insert(INSERT, us + "\n")
+            self.txt.insert(INSERT, str(us) + "\n")
         t = threading.Thread(target=self.update)
         t.start()
         self.window.mainloop()
@@ -34,7 +34,7 @@ class ScreenLoggedOn(threading.Thread):
         while True:
             self.txt.delete('1.0', END)
             for us in ClientHandler.users:
-                self.txt.insert(INSERT, us + "\n")
+                self.txt.insert(INSERT, str(us) + "\n")
             time.sleep(0.5)
 
     def print_bericht_gui_server(self, message):

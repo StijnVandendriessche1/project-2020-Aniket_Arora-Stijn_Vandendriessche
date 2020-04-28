@@ -5,6 +5,7 @@ import pickle
 import json
 import base64
 import jsonpickle
+from datetime import datetime
 
 from domein.article import Article
 
@@ -23,14 +24,27 @@ class ClientHandler(threading.Thread):
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
         self.data = pd.read_csv("../data/fake.csv")
+        self.user = None
 
-    def log_on(self, name):
+    def log_on(self, user):
         for i in ClientHandler.users:
-            if name == i:
+            if i.email == user.email:
                 return False
-        self.titel = name
-        ClientHandler.users.append(self.titel)
+        self.user = user
+        ClientHandler.users.append(self.user)
+        if not self.exists_in_csv(user):
+            self.write_user_to_csv()
         return True
+
+    def exists_in_csv(self, user):
+        u = pd.read_csv("../data/users.csv")
+        return u['email'].str.contains(user.email).any()
+
+
+    def write_user_to_csv(self):
+        u = pd.read_csv("../data/users.csv")
+        u = u.append({'name': self.user.name, 'nickname': self.user.nickname, 'email': self.user.email}, ignore_index=True)
+        u.to_csv('../data/users.csv', index=False)
 
 
     def run(self):
@@ -39,11 +53,12 @@ class ClientHandler(threading.Thread):
         commando = io_stream_client.readline().rstrip('\n')
         while (commando != "CLOSE"):
             if commando == "login":
-                naam = io_stream_client.readline().rstrip('\n')
-                a = self.log_on(naam)
+                answer = io_stream_client.readline().rstrip('\n')
+                user = jsonpickle.decode(answer)
+                a = self.log_on(user)
                 if a:
                     io_stream_client.write("%s\n" % "success")
-                    self.print_bericht_gui_server("%s logde zonet in" % naam)
+                    self.print_bericht_gui_server("%s logde zonet in als %s" % (self.user.name, self.user.nickname))
                 else:
                     io_stream_client.write("%s\n" % "deze naam is momenteel al ingelogd")
                 io_stream_client.flush()
@@ -60,11 +75,19 @@ class ClientHandler(threading.Thread):
                 x = jsonpickle.encode(b)
                 io_stream_client.write("%s\n" % x)
                 io_stream_client.flush()
+            now = datetime.now()
+            c = pd.read_csv("../data/logboek.csv")
+            c = c.append({'user_mail': self.user.email, 'command': commando, 'time': now}, ignore_index=True)
+            c.to_csv('../data/logboek.csv', index=False)
             commando = io_stream_client.readline().rstrip('\n')
 
-        if self.titel:
-            self.print_bericht_gui_server("%s logde zonet uit" % self.titel)
-            ClientHandler.users.remove(self.titel)
+        if self.user:
+            self.print_bericht_gui_server("%s logde zonet uit (%s)" % (self.user.name, self.user.nickname))
+            now = datetime.now()
+            c = pd.read_csv("../data/logboek.csv")
+            c = c.append({'user_mail': self.user.email, 'command': "logout", 'time': now}, ignore_index=True)
+            c.to_csv('../data/logboek.csv', index=False)
+            ClientHandler.users.remove(self.user)
         self.print_bericht_gui_server("Connection with client closed...")
         self.socket_to_client.close()
 

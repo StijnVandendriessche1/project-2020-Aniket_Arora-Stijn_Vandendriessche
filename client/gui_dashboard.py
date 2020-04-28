@@ -79,6 +79,7 @@ class Dashboard(Frame):
         answer = self.master.my_writer_obj.readline().rstrip('\n')
         print(answer)
         art = jsonpickle.decode(answer)
+        self.lstnumbers.delete(0, 'end')
         self.article_title.set("")
         d = 1
         for i in art.title:
