@@ -8,6 +8,7 @@ from PIL import Image, ImageTk
 import requests
 from io import BytesIO
 import pandas as pd
+from domein.user import User
 
 
 class Window(Frame):
@@ -17,9 +18,7 @@ class Window(Frame):
         self.init_window()
 
         # Variables
-        self.name = ""
-        self.nickname = ""
-        self.email = ""
+        self.user = None
 
         self.dataset_users = pd.read_csv('../data/users.csv')
 
@@ -27,30 +26,36 @@ class Window(Frame):
     def init_window(self):
         # changing the title of our master widget
         self.master.title("Registreren")
-        self.master.geometry("400x300")
+        self.master.geometry("400x140")
 
         # allowing the widget to take the full space of the root window
         self.pack(fill=BOTH, expand=1)
 
         Label(self, text="Naam:").grid(row=0)
-
         self.entry_naam = Entry(self, width=40)
-        self.label_resultaat = Label(self, width=40, anchor='w'  )
+        Label(self, text="Nickname:").grid(row=1)
+        self.entry_nickname = Entry(self, width=40)
+        Label(self, text="Email:").grid(row=2)
+        self.entry_email = Entry(self, width=40)
 
         self.entry_naam.grid(row=0, column=1, sticky=E + W, padx=(5, 5), pady =(5,5))
-        self.label_resultaat.grid(row=2, column=1, sticky=E + W)
+        self.entry_nickname.grid(row=1, column=1, sticky=E + W, padx=(5, 5), pady=(5, 5))
+        self.entry_email.grid(row=2, column=1, sticky=E + W, padx=(5, 5), pady=(5, 5))
+
+        self.label_resultaat = Label(self, width=40, anchor='w')
+        self.label_resultaat.grid(row=3, column=1, sticky=E + W)
 
         self.btnRegister = Button(self, text="Log in", command=self.login)
-        self.btnRegister.grid(row=3, column=0, columnspan=2, pady=(0, 5), padx=(5, 5), sticky=N + S + E + W)
+        self.btnRegister.grid(row=4, column=0, columnspan=2, pady=(0, 5), padx=(5, 5), sticky=N + S + E + W)
 
-        Grid.rowconfigure(self, 3, weight=1)
+        Grid.rowconfigure(self, 5, weight=1)
         Grid.columnconfigure(self, 1, weight=1)
 
     def login(self):
         try:
-            naam = self.entry_naam.get()
+            self.user = User(self.entry_naam.get(), self.entry_nickname.get(), self.entry_email.get())
             self.master.my_writer_obj.write("login\n")
-            self.master.my_writer_obj.write("%s\n" % naam)
+            self.master.my_writer_obj.write("%s\n" % self.user.name)
             self.master.my_writer_obj.flush()
 
             # # waiting for answer
@@ -60,10 +65,11 @@ class Window(Frame):
             self.label_resultaat['text'] = answer
             if answer == "success":
                 logging.info(answer)
+                self.append_user_csv()
                 self.master.switch_frame("dashboard")
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
-            messagebox.showinfo("Sommen", "Something has gone wrong...")
+            messagebox.showinfo("Log in", "Something has gone wrong...")
 
     def get_random(self):
         self.master.my_writer_obj.write("random\n")
@@ -92,10 +98,11 @@ class Window(Frame):
         #img.place(x=0,y=0)
 
     def append_user_csv(self):
-        dataframe_user = pd.DataFrame({"name": [self.name],
-                                       "nickname": [self.nickname],
-                                       "email": [self.email]})
+        print("doing the csv shit")
+        dataframe_user = pd.DataFrame({"name": [self.user.name],
+                                       "nickname": [self.user.nickname],
+                                       "email": [self.user.email]})
         logging.info('Made user')
         pd.concat([self.dataset_users, dataframe_user], axis=0, ignore_index=True)
-        self.dataset_users.to_csv('data/users.csv', index=False)
+        self.dataset_users.to_csv('../data/users.csv', index=False)
         logging.info('Appending users.csv with new dataset')
