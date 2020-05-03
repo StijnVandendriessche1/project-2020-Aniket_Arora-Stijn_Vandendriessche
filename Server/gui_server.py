@@ -7,6 +7,7 @@ from tkinter import *
 
 from Server.server import SommenServer
 from Server.gui_logged_on import ScreenLoggedOn
+from Server.gui_client_data import ScreenClientData
 
 class ServerWindow(Frame):
     def __init__(self, master=None):
@@ -37,6 +38,10 @@ class ServerWindow(Frame):
         self.btn_text.set("Start Server")
         self.buttonServer = Button(self, textvariable=self.btn_text, command=self.start_stop_server)
         self.buttonServer.grid(row=3, column=0, columnspan=3, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
+        self.buttonServer = Button(self, text="alle clients", command=self.client_data)
+        self.buttonServer.grid(row=4, column=0, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
+        self.buttonServer = Button(self, text="stats", command=self.start_stop_server)
+        self.buttonServer.grid(row=5, column=0, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
 
         Grid.rowconfigure(self, 1, weight=1)
         Grid.columnconfigure(self, 0, weight=1)
@@ -72,5 +77,9 @@ class ServerWindow(Frame):
             self.server.init_server()
             self.server.start()             #thread!
             self.btn_text.set("ingelogde clients")
+
+    def client_data(self):
+        t = ScreenClientData(message_queue=self.messages_queue)
+        t.start()
 
 

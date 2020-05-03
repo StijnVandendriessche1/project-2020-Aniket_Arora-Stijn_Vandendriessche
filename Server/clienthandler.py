@@ -81,17 +81,46 @@ class ClientHandler(threading.Thread):
                 io_stream_client.flush()
             elif commando == "random":
                 r = random.randint(0, 6411)
-                a = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url)
+                a = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url, self.data.iloc[r].author, self.data.iloc[r].likes, self.data.iloc[r].shares, self.data.iloc[r].comments)
                 x = jsonpickle.encode(a)
                 io_stream_client.write("%s\n"%x)
                 io_stream_client.flush()
             elif commando == "title":
                 title = io_stream_client.readline().rstrip('\n')
                 a = self.data.loc[self.data['title']==title]
-                b = Article(a.title.values[0], a.text.values[0], a.main_img_url.values[0])
+                b = Article(a.title.values[0], a.text.values[0], a.main_img_url.values[0], a.author.values[0], a.likes.values[0], a.shares.values[0], a.comments.values[0])
                 x = jsonpickle.encode(b)
                 io_stream_client.write("%s\n" % x)
                 io_stream_client.flush()
+            elif commando == "top10":
+                para = io_stream_client.readline().rstrip('\n')
+                if para == "likes":
+                    self.data = self.data.sort_values(by=['likes'], ascending=False)
+                    a = []
+                    for r in range(0,10):
+                        b = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url, self.data.iloc[r].author, self.data.iloc[r].likes, self.data.iloc[r].shares, self.data.iloc[r].comments)
+                        a.append(b)
+                    x = jsonpickle.encode(a)
+                    io_stream_client.write("%s\n" % x)
+                    io_stream_client.flush()
+                elif para == "comments":
+                    self.data = self.data.sort_values(by=['comments'], ascending=False)
+                    a = []
+                    for r in range(0,10):
+                        b = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url, self.data.iloc[r].author, self.data.iloc[r].likes, self.data.iloc[r].shares, self.data.iloc[r].comments)
+                        a.append(b)
+                    x = jsonpickle.encode(a)
+                    io_stream_client.write("%s\n" % x)
+                    io_stream_client.flush()
+                elif para == "shares":
+                    self.data = self.data.sort_values(by=['shares'], ascending=False)
+                    a = []
+                    for r in range(0,10):
+                        b = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url, self.data.iloc[r].author, self.data.iloc[r].likes, self.data.iloc[r].shares, self.data.iloc[r].comments)
+                        a.append(b)
+                    x = jsonpickle.encode(a)
+                    io_stream_client.write("%s\n" % x)
+                    io_stream_client.flush()
             now = datetime.now()
             c = pd.read_csv("../data/logboek.csv")
             c = c.append({'user_mail': self.user.email, 'command': commando, 'time': now}, ignore_index=True)
@@ -106,6 +135,7 @@ class ClientHandler(threading.Thread):
             c.to_csv('../data/logboek.csv', index=False)
             ClientHandler.users.remove(self.user)
         self.print_bericht_gui_server("Connection with client closed...")
+        ClientHandler.numbers_clienthandlers -=1
         self.socket_to_client.close()
 
     def print_bericht_gui_server(self, message):

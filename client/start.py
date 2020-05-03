@@ -1,6 +1,11 @@
 from tkinter import *
 from client.gui_client import Window
 from client.gui_dashboard import Dashboard
+from client.gui_stats import Stats
+from client.gui_top10 import Top10
+from client.gui_auteur import Auteur
+from client.gui_country import Country
+from client.gui_fourth import Fourth
 import logging
 import socket
 from tkinter import messagebox
@@ -53,8 +58,16 @@ class StartApp(Tk):
             new_frame = Window(self)
         elif name_class == "dashboard":
             new_frame = Dashboard(self)
-        #elif name_class == "numbers":
-            #new_frame = NumbersFrame(self)
+        elif name_class == "stats":
+            new_frame = Stats(self)
+        elif name_class == "top10":
+            new_frame = Top10(self)
+        elif name_class == "auteur":
+            new_frame = Auteur(self)
+        elif name_class == "country":
+            new_frame = Country(self)
+        elif name_class == "fourth":
+            new_frame = Fourth(self)
 
         if new_frame is not None:
             self._frame = new_frame

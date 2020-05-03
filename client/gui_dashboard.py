@@ -41,7 +41,7 @@ class Dashboard(Frame):
         self.btnSearch = Button(self, text="Zoek!", command=self.zoeken)
         self.btnSearch.grid(row=1, column=2, pady=(32, 32), sticky=N + S + E + W)
 
-        self.btnStats = Button(self, text="Statistieken", command=self.zoeken)
+        self.btnStats = Button(self, text="Statistieken", command=self.switch_stats)
         self.btnStats.grid(row=1, column=4, padx=(350, 16), pady=(32, 32), sticky=E)
 
         self.Title = Label(self, textvariable=self.article_title, font=("Arial", 24, "bold italic")).grid(row=2, column=1, columnspan=4)
@@ -72,12 +72,10 @@ class Dashboard(Frame):
 
     def zoeken(self):
         title = self.entSearch.get()
-        print(title)
         self.master.my_writer_obj.write("title\n")
         self.master.my_writer_obj.write("%s\n" % title)
         self.master.my_writer_obj.flush()
         answer = self.master.my_writer_obj.readline().rstrip('\n')
-        print(answer)
         art = jsonpickle.decode(answer)
         self.lstnumbers.delete(0, 'end')
         self.article_title.set("")
@@ -164,3 +162,6 @@ class Dashboard(Frame):
         #render = ImageTk.PhotoImage(load)
         #self.Image.configure(image=render)
         #self.Image.image = render
+
+    def switch_stats(self):
+        self.master.switch_frame("stats")
