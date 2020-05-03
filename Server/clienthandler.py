@@ -24,6 +24,23 @@ class ClientHandler(threading.Thread):
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
         self.data = pd.read_csv("../data/fake.csv")
+        dd = self.data.drop('uuid', axis=1)
+        dd = dd.drop('ord_in_thread', axis=1)
+        dd = dd.drop('published', axis=1)
+        dd = dd.drop('language', axis=1)
+        dd = dd.drop('crawled', axis=1)
+        dd = dd.drop('site_url', axis=1)
+        dd = dd.drop('country', axis=1)
+        dd = dd.drop('domain_rank', axis=1)
+        dd = dd.drop('thread_title', axis=1)
+        dd = dd.drop('spam_score', axis=1)
+        dd = dd.drop('replies_count', axis=1)
+        dd = dd.drop('participants_count', axis=1)
+        dd = dd.drop('type', axis=1)
+        dd = dd.dropna()
+        dd.drop_duplicates(keep="first", inplace=True)
+        dd.drop_duplicates("title", inplace=True)
+        self.data = dd
         self.user = None
 
     def log_on(self, user):
@@ -63,7 +80,7 @@ class ClientHandler(threading.Thread):
                     io_stream_client.write("%s\n" % "deze naam is momenteel al ingelogd")
                 io_stream_client.flush()
             elif commando == "random":
-                r = random.randint(0, 12999)
+                r = random.randint(0, 6411)
                 a = Article(self.data.iloc[r].title, self.data.iloc[r].text,self.data.iloc[r].main_img_url)
                 x = jsonpickle.encode(a)
                 io_stream_client.write("%s\n"%x)
