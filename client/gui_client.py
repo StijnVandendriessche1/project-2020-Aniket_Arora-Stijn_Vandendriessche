@@ -67,4 +67,7 @@ class Window(Frame):
                 self.master.switch_frame("dashboard")
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
-            messagebox.showinfo("Log in", "Something has gone wrong...")
+            print(ex)
+            msgbox = messagebox.askquestion('Log in', 'Something has gone wrong. Do you want to retry connecting?', icon='warning')
+            if msgbox == 'yes':
+                self.master.makeConnnectionWithServer()
