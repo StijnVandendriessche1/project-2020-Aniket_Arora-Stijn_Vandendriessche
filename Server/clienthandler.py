@@ -1,3 +1,5 @@
+import math
+import os
 import threading
 import pandas as pd
 import random
@@ -6,8 +8,12 @@ import json
 import base64
 import jsonpickle
 from datetime import datetime
+import seaborn as sns
+import matplotlib.pyplot as plt
+from PIL import Image, ImageTk
 
 from domein.article import Article
+
 
 class ClientHandler(threading.Thread):
 
@@ -66,6 +72,7 @@ class ClientHandler(threading.Thread):
 
     def run(self):
         io_stream_client = self.socket_to_client.makefile(mode='rw')
+        io_stream_client_bytes = self.socket_to_client.makefile(mode='rwb')
         self.print_bericht_gui_server("Waiting for numbers...")
         commando = io_stream_client.readline().rstrip('\n')
         while (commando != "CLOSE"):
@@ -85,6 +92,26 @@ class ClientHandler(threading.Thread):
                 x = jsonpickle.encode(a)
                 io_stream_client.write("%s\n"%x)
                 io_stream_client.flush()
+            elif commando == "stats":
+                dataset = pd.read_csv('../data/logboek.csv')
+                dataset['hour'] = pd.DatetimeIndex(dataset['time']).strftime("%H")
+                fig = plt.figure()
+                sns.countplot(x='hour', data=dataset)
+                # path = "../data/hour.png"
+                # plot.figure.savefig(path)
+
+
+                # f = open(path, 'rb')
+                pickle.dump(fig, io_stream_client_bytes)
+                # size_in_bytes = os.path.getsize(path)
+                # number = math.ceil(size_in_bytes / 1024)
+                # pickle.dump("%d" % number, io_stream_client)
+                # io_stream_client.flush()
+                # l = f.read(1024)
+                # while (l):
+                #     pickle.dump(l, io_stream_client_bytes)
+                #     l = f.read(1024)
+
             elif commando == "title":
                 title = io_stream_client.readline().rstrip('\n')
                 a = self.data.loc[self.data['title']==title]
@@ -140,3 +167,8 @@ class ClientHandler(threading.Thread):
 
     def print_bericht_gui_server(self, message):
         self.messages_queue.put("CLH %d:> %s" % (self.id, message))
+
+    def alert_message(self, message):
+        io_stream_client = self.socket_to_client.makefile(mode='rw')
+        io_stream_client.write("alert: %s\n" % message)
+        io_stream_client.flush()

@@ -8,6 +8,8 @@ from Server.clienthandler import ClientHandler
 logging.basicConfig(level=logging.INFO)
 
 class SommenServer(threading.Thread):
+    clients = []
+
     def __init__(self, host, port, messages_queue):
         threading.Thread.__init__(self)
         self.__is_connected = False
@@ -48,6 +50,7 @@ class SommenServer(threading.Thread):
                 clh = ClientHandler(socket_to_client, self.messages_queue)
                 clh.start()
                 self.print_bericht_gui_server("Current Thread count: %i." % threading.active_count())
+                SommenServer.clients.append(clh)
 
         except Exception as ex:
             self.print_bericht_gui_server("Serversocket afgesloten")

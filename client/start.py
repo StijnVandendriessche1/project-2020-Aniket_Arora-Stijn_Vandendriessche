@@ -1,4 +1,7 @@
+import threading
+import time
 from tkinter import *
+from queue import Queue
 from client.gui_client import Window
 from client.gui_dashboard import Dashboard
 from client.gui_stats import Stats
@@ -10,12 +13,14 @@ import logging
 import socket
 from tkinter import messagebox
 
+
 class StartApp(Tk):
 
     def __init__(self):
         Tk.__init__(self)
         self._frame = None
         self.my_writer_obj = None
+        self.my_writer_obj_bytes = None
         self.socket_to_server = None
         self.makeConnnectionWithServer()
         self.switch_frame("start")
@@ -33,6 +38,7 @@ class StartApp(Tk):
             # connection to hostname on the port.
             self.socket_to_server.connect((host, port))
             self.my_writer_obj = self.socket_to_server.makefile(mode='rw')
+            self.my_writer_obj_bytes = self.socket_to_server.makefile(mode='rwb')
             logging.info("Open connection with server succesfully")
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)
@@ -72,6 +78,29 @@ class StartApp(Tk):
         if new_frame is not None:
             self._frame = new_frame
             self._frame.pack()
+
+    def init_messages_queue(self):
+        self.messages_queue = Queue()
+        t = threading.Thread(target=self.read)
+        t.start()
+
+    def read(self):
+        while True:
+            message = self.my_writer_obj.read()
+            time.sleep(10)
+            if message:
+                splitmessage = message.split(' ')
+                if splitmessage[0] == 'alert:':
+                    self.show_alert(message)
+
+    def show_alert(self, message):
+        self.window = Tk()
+        self.window.title("Alert")
+        self.window.geometry('500x300')
+
+        lbl = Label(self.window, text=message)
+        lbl.grid(column=0, row=0, columnspan=2)
+
 
 root = StartApp()
 root.mainloop()
