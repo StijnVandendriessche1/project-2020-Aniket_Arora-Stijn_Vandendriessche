@@ -27,9 +27,7 @@ class Stats(Frame):
         self.master.title("Statistieken")
         self.master.geometry("175x130")
         # allowing the widget to take the full space of the root window
-        self.pack(fill=BOTH, expand=1)
-
-
+        # self.pack(fill=BOTH, expand=1)
 
         self.btnTop10 = Button(self, text="Top 10", command=self.top10)
         self.btnTop10.grid(row=1, padx=(16, 16), pady=(16, 16), sticky=N + S + E + W)
@@ -37,7 +35,7 @@ class Stats(Frame):
         self.btnAuthor.grid(row=1,column=1, pady=(16, 16), sticky=N + S + E + W)
         self.btnCountry = Button(self, text="Land", command=self.country)
         self.btnCountry.grid(row=2, padx=(16, 16), sticky=N + S + E + W)
-        self.btnSomething = Button(self, text="Something", command=self.fourth)
+        self.btnSomething = Button(self, text="Server stats", command=self.fourth)
         self.btnSomething.grid(row=2,column=1, sticky=N + S + E + W)
         self.btnBack = Button(self, text="Terug", command=self.back)
         self.btnBack.grid(row=3, columnspan=2, padx=(16, 16), pady=(16, 16), sticky=N + S + E + W)

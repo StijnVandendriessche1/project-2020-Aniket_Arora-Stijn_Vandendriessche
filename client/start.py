@@ -8,7 +8,7 @@ from client.gui_stats import Stats
 from client.gui_top10 import Top10
 from client.gui_auteur import Auteur
 from client.gui_country import Country
-from client.gui_fourth import Fourth
+from client.gui_server_stats import ServerStats
 import logging
 import socket
 from tkinter import messagebox
@@ -74,7 +74,7 @@ class StartApp(Tk):
         elif name_class == "country":
             new_frame = Country(self)
         elif name_class == "fourth":
-            new_frame = Fourth(self)
+            new_frame = ServerStats(self)
 
         if new_frame is not None:
             self._frame = new_frame
