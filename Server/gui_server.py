@@ -5,6 +5,7 @@ from queue import Queue
 from threading import Thread
 from tkinter import *
 
+from Server.gui_popular import ScreenPopular
 from Server.server import SommenServer
 from Server.gui_logged_on import ScreenLoggedOn
 from Server.gui_client_data import ScreenClientData
@@ -44,6 +45,8 @@ class ServerWindow(Frame):
         self.buttonServer.grid(row=4, column=0, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
         self.buttonServer = Button(self, text="alert clients", command=self.alert)
         self.buttonServer.grid(row=5, column=0, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
+        self.buttonServer = Button(self, text="populair search queries", command=self.popular)
+        self.buttonServer.grid(row=6, column=0, pady=(5, 5), padx=(5, 5), sticky=N + S + E + W)
 
         Grid.rowconfigure(self, 1, weight=1)
         Grid.columnconfigure(self, 0, weight=1)
@@ -87,6 +90,13 @@ class ServerWindow(Frame):
     def alert(self):
         try:
             t = ScreenAlert()
+            t.start()
+        except Exception as ex:
+            logging.error("Foutmelding: %s" % ex)
+
+    def popular(self):
+        try:
+            t = ScreenPopular()
             t.start()
         except Exception as ex:
             logging.error("Foutmelding: %s" % ex)

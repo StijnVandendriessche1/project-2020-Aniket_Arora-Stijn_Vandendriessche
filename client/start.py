@@ -23,6 +23,7 @@ class StartApp(Tk):
         self.my_writer_obj_bytes = None
         self.socket_to_server = None
         self.makeConnnectionWithServer()
+        self.init_messages_queue()
         self.switch_frame("start")
 
     def __del__(self):
@@ -81,17 +82,22 @@ class StartApp(Tk):
 
     def init_messages_queue(self):
         self.messages_queue = Queue()
-        t = threading.Thread(target=self.read)
+        t = threading.Thread(target=self.read, args=self.messages_queue)
         t.start()
 
-    def read(self):
-        while True:
-            message = self.my_writer_obj.read()
-            time.sleep(10)
-            if message:
-                splitmessage = message.split(' ')
-                if splitmessage[0] == 'alert:':
+    def read(self, message_queue):
+        try:
+            message = message_queue.get()
+            while message != "CLOSE_SERVER":
+                # splitmessage = message.split(' ')
+                if message == 'alert:':
                     self.show_alert(message)
+                self.lstnumbers.insert(END, message)
+                self.messages_queue.task_done()
+                message = self.messages_queue.get()
+            print("queue stop")
+        except Exception as ex:
+            logging.error(ex)
 
     def show_alert(self, message):
         self.window = Tk()
