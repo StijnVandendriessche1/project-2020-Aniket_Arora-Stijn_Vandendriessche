@@ -36,7 +36,6 @@ class ClientHandler(threading.Thread):
         dd = dd.drop('language', axis=1)
         dd = dd.drop('crawled', axis=1)
         dd = dd.drop('site_url', axis=1)
-        dd = dd.drop('country', axis=1)
         dd = dd.drop('domain_rank', axis=1)
         dd = dd.drop('thread_title', axis=1)
         dd = dd.drop('spam_score', axis=1)
@@ -97,21 +96,15 @@ class ClientHandler(threading.Thread):
                 dataset['hour'] = pd.DatetimeIndex(dataset['time']).strftime("%H")
                 fig = plt.figure()
                 sns.countplot(x='hour', data=dataset)
-                # path = "../data/hour.png"
-                # plot.figure.savefig(path)
-
-
-                # f = open(path, 'rb')
                 pickle.dump(fig, io_stream_client_bytes)
-                # size_in_bytes = os.path.getsize(path)
-                # number = math.ceil(size_in_bytes / 1024)
-                # pickle.dump("%d" % number, io_stream_client)
-                # io_stream_client.flush()
-                # l = f.read(1024)
-                # while (l):
-                #     pickle.dump(l, io_stream_client_bytes)
-                #     l = f.read(1024)
-
+            elif commando == "country":
+                fig = plt.figure()
+                sns.countplot(x='country', data=self.data)
+                pickle.dump(fig, io_stream_client_bytes)
+            elif commando == "author":
+                fig = plt.figure()
+                sns.countplot(x='author', data=self.data, order=self.data.author.value_counts().iloc[:5].index)
+                pickle.dump(fig, io_stream_client_bytes)
             elif commando == "title":
                 title = io_stream_client.readline().rstrip('\n')
                 a = self.data.loc[self.data['title']==title]

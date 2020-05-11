@@ -1,4 +1,5 @@
 import logging
+import pickle
 import socket
 from tkinter import *
 from tkinter import messagebox
@@ -7,6 +8,8 @@ from PIL import Image, ImageTk
 import requests
 from io import BytesIO
 import pandas as pd
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 from domein.user import User
 
 
@@ -15,16 +18,25 @@ class Auteur(Frame):
         Frame.__init__(self, master)
         self.master = master
         self.init_window()
-
-        # Variables
-        self.user = None
-
-        self.dataset_users = pd.read_csv('../data/users.csv')
+        self.get_img()
 
     # Creation of init_window
     def init_window(self):
         # changing the title of our master widget
         self.master.title("Auteur")
-        self.master.geometry("175x130")
+        self.master.geometry("640x480")
         # allowing the widget to take the full space of the root window
         self.pack(fill=BOTH, expand=1)
+
+    def get_img(self):
+        try:
+            self.master.my_writer_obj.write("author\n")
+            self.master.my_writer_obj.flush()
+            answer = pickle.load(self.master.my_writer_obj_bytes)
+            print(answer)
+
+            fig_canvas = FigureCanvasTkAgg(answer, self.master)
+            fig_canvas.draw()
+            fig_canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1.0)
+        except Exception as ex:
+            logging.error("Foutmelding: %s" % ex)
